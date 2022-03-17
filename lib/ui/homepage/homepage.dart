@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mahevent/database/firestore_service.dart';
 import 'package:mahevent/model/category.dart';
@@ -24,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   List<Event>? _retrievedEventList;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initRetrieval();
   }
@@ -37,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final _events = DatabaseService().retrieveEvents();
 
     return Scaffold(
       // appBar: AppBar(
@@ -115,7 +112,7 @@ class _HomePageState extends State<HomePage> {
 
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return const CircularProgressIndicator();
                                 }
 
                                 return Column(
@@ -137,27 +134,7 @@ class _HomePageState extends State<HomePage> {
                                       )
                                   ],
                                 );
-                              })
-
-                          // builder: (context, states, _) => Column(
-                          //   children: <Widget>[
-                          //     for (final event in events.where(
-                          //       (element) => element.categoryIds
-                          //           .contains(states.selectedCategory),
-                          //     ))
-                          //       GestureDetector(
-                          //         onTap: () {
-                          //           Navigator.of(context).push(MaterialPageRoute(
-                          //             builder: (context) =>
-                          //                 EventDetails(event: event),
-                          //           ));
-                          //         },
-                          //         child: EventWidget(event: event),
-                          //       )
-                          //   ],
-                          // ),
-
-                          )
+                              }))
                     ],
                   ),
                 ),
