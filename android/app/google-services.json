@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "190448504565",
+    "project_id": "flutter-mahevent",
+    "storage_bucket": "flutter-mahevent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190448504565:android:eb8e2fb4b75ff6fe0f3fbc",
+        "android_client_info": {
+          "package_name": "com.example.mahevent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190448504565-tnesikoguu11rnomk9re95ngrtjhlurl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQXr5DSSL4hRRBkUiYdZBi3md4vg3SDsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190448504565-tnesikoguu11rnomk9re95ngrtjhlurl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
