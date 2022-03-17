@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event {
   final String imagePath,
       title,
@@ -22,6 +24,35 @@ class Event {
       required this.hostImage,
       required this.categoryIds,
       required this.eventImages});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'imagePath': imagePath,
+      'title': title,
+      'description': description,
+      'location': location,
+      'duration': duration,
+      'h1': h1,
+      'h2': h2,
+      'host': host,
+      'hostImage': hostImage,
+      'categoryIds': categoryIds,
+      'eventImages': eventImages,
+    };
+  }
+
+  Event.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
+      : imagePath = doc["imagePath"],
+        title = doc["title"],
+        description = doc["description"],
+        location = doc["location"],
+        duration = doc["duration"],
+        h1 = doc["h1"],
+        h2 = doc["h2"],
+        host = doc["host"],
+        hostImage = doc["hostImage"],
+        categoryIds = doc["categoryIds"],
+        eventImages = doc["eventImages"];
 }
 
 final fiveKmRunEvent = Event(

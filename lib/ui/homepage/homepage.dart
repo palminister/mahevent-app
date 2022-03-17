@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahevent/database/firestore_service.dart';
 import 'package:mahevent/model/category.dart';
 import 'package:mahevent/model/event.dart';
 import 'package:mahevent/states.dart';
@@ -17,9 +18,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final DatabaseService _service = DatabaseService();
+  Future<List<Event>>? _eventList;
+  List<Event>? _retrievedEventList;
+  @override
+  void initState() {
+    super.initState();
+    _initRetrieval();
+  }
+
+  Future<void> _initRetrieval() async {
+    _eventList = _service.retrieveEvents();
+    _retrievedEventList = await _service.retrieveEvents();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       // appBar: AppBar(
       //   toolbarHeight: 80,
@@ -84,24 +100,41 @@ class _HomePageState extends State<HomePage> {
                             ),
                           )),
                       Consumer<States>(
-                        builder: (context, states, _) => Column(
-                          children: <Widget>[
-                            for (final event in events.where(
-                              (element) => element.categoryIds
-                                  .contains(states.selectedCategory),
-                            ))
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        EventDetails(event: event),
-                                  ));
-                                },
-                                child: EventWidget(event: event),
-                              )
-                          ],
-                        ),
-                      )
+                          builder: (context, states, _) => FutureBuilder(
+                              future: _eventList,
+                              builder: (context,
+                                  AsyncSnapshot<List<Event>> snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                    child: Text('No data'),
+                                  );
+                                }
+
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                return Column(
+                                  children: <Widget>[
+                                    for (final event
+                                        in _retrievedEventList!.where(
+                                      (element) => element.categoryIds
+                                          .contains(states.selectedCategory),
+                                    ))
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EventDetails(
+                                                          event: event)));
+                                        },
+                                        child: EventWidget(event: event),
+                                      )
+                                  ],
+                                );
+                              }))
                     ],
                   ),
                 ),
