@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../model/user.dart';
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -10,8 +12,16 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    final user = mainUser;
     return const Scaffold(
-      body: Center(child: Text('Profile Page')),
-    );
+        // body: ListView(
+        //   physics: BouncingScrollPhysics(),
+        //   children: [
+        //     ProfileWidget(
+        //       imagePath: user.imagePath,
+        //     )
+        //   ],
+        // ),
+        );
   }
 }
