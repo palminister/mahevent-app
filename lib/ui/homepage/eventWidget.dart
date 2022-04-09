@@ -26,8 +26,8 @@ class EventWidget extends StatelessWidget {
               borderRadius: const BorderRadius.all(
                 Radius.circular(30),
               ),
-              child: Image.asset(
-                event.imagePath,
+              child: Image(
+                image: NetworkImage(event.imagePath),
                 height: 150,
                 fit: BoxFit.fitWidth,
               ),

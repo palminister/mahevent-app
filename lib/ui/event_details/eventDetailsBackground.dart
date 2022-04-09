@@ -14,11 +14,13 @@ class EventDetailsBackground extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: ClipPath(
         clipper: ImageClipper(),
-        child: Image.asset(
-          event.imagePath,
+        child: Image(
+          image: NetworkImage(event.imagePath),
           fit: BoxFit.cover,
           width: screenWidth,
           height: screenHeight * 0.5,
+          color: Colors.pink,
+          colorBlendMode: BlendMode.darken,
         ),
       ),
     );
