@@ -46,10 +46,10 @@ const TextStyle hostTextStyle = TextStyle(
 );
 
 const TextStyle h1TextStyle = TextStyle(
-  fontSize: 28.0,
-  fontWeight: FontWeight.w800,
-  color: Color(0xFFFF4700),
+  fontSize: 30.0,
+  fontWeight: FontWeight.w900,
+  color: Color.fromARGB(255, 232, 6, 104),
 );
 
-final TextStyle h2TextStyle =
-    h1TextStyle.copyWith(color: const Color(0xFF000000));
+final TextStyle h2TextStyle = TextStyle(
+    fontSize: 25.0, fontWeight: FontWeight.w800, color: Color(0xFF000000));
