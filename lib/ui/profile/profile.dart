@@ -67,6 +67,24 @@ class _ProfileState extends State<Profile> {
                   user.about,
                   style: appTextStyle.copyWith(
                       color: Colors.black, fontWeight: FontWeight.w200),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Interest',
+                    style: h2TextStyle,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  user.interest,
+                  style: appTextStyle.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.w200),
                 )
               ],
             ),

@@ -20,18 +20,15 @@ class _EditProfileState extends State<EditProfile> {
       body: ListView(
         children: [
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           ProfileWidget(
             imagePath: user.imagePath,
             isEdit: true,
             onClicked: () async {},
           ),
-          const SizedBox(
-            height: 10,
-          ),
           Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
                 TextFieldWidget(
@@ -40,7 +37,7 @@ class _EditProfileState extends State<EditProfile> {
                   onChanged: (name) {},
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 20,
                 ),
                 TextFieldWidget(
                   label: 'Username',
@@ -48,13 +45,22 @@ class _EditProfileState extends State<EditProfile> {
                   onChanged: (username) {},
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 20,
                 ),
                 TextFieldWidget(
                   label: 'About',
                   text: user.about,
                   maxLines: 3,
                   onChanged: (about) {},
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFieldWidget(
+                  label: 'Interest',
+                  text: user.interest,
+                  maxLines: 2,
+                  onChanged: (interest) {},
                 ),
                 const SizedBox(
                   height: 40,
