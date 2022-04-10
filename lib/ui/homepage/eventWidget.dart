@@ -4,7 +4,9 @@ import 'package:mahevent/styles.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
-  const EventWidget({Key? key, required this.event}) : super(key: key);
+  final double distance;
+  const EventWidget({Key? key, required this.event, required this.distance})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,13 @@ class EventWidget extends StatelessWidget {
                               Text(event.location,
                                   style: appTextStyle.copyWith(
                                       color: Colors.black,
+                                      fontWeight: FontWeight.w200)),
+                              Text(
+                                  ' (' +
+                                      distance.toStringAsPrecision(2) +
+                                      ' KM)',
+                                  style: appTextStyle.copyWith(
+                                      color: Colors.indigo,
                                       fontWeight: FontWeight.w200))
                             ],
                           )

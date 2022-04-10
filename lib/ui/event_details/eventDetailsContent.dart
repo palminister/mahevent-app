@@ -65,8 +65,8 @@ class EventDetailsContent extends StatelessWidget {
             child: ClipOval(
                 child: Image(
               image: NetworkImage(event.imagePath),
-              width: 100,
-              height: 100,
+              width: 130,
+              height: 130,
               fit: BoxFit.cover,
             )),
           ),
@@ -96,11 +96,12 @@ class EventDetailsContent extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+            padding: const EdgeInsets.fromLTRB(25, 0, 25, 16),
             child: Text(
               event.description,
-              style: eventLocationTextStyle,
-              textAlign: TextAlign.center,
+              style: appTextStyle.copyWith(
+                  color: Colors.black, fontWeight: FontWeight.w200),
+              textAlign: TextAlign.left,
             ),
           )
         ],

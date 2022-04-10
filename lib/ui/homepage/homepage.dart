@@ -9,6 +9,7 @@ import 'package:mahevent/ui/homepage/categoryWidget.dart';
 import 'package:mahevent/ui/homepage/eventWidget.dart';
 import 'package:mahevent/ui/homepage/homepageBackground.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' show cos, sqrt, asin;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,10 +33,23 @@ class _HomePageState extends State<HomePage> {
     _retrievedEventList = await _service.retrieveEvents();
   }
 
+  final double lat = 13.794498305148874;
+  final double lng = 100.32558404809016;
+
+  // https://en.wikipedia.org/wiki/Haversine_formula
+  // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+  double calculateDistanceKm(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       // appBar: AppBar(
       //   toolbarHeight: 80,
@@ -130,7 +144,14 @@ class _HomePageState extends State<HomePage> {
                                                       EventDetails(
                                                           event: event)));
                                         },
-                                        child: EventWidget(event: event),
+                                        child: EventWidget(
+                                          event: event,
+                                          distance: calculateDistanceKm(
+                                              lat,
+                                              lng,
+                                              event.coordinates[0],
+                                              event.coordinates[1]),
+                                        ),
                                       )
                                   ],
                                 );
