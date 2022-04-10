@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> {
   final double lat = 13.794498305148874;
   final double lng = 100.32558404809016;
 
+  static const double limitDistance = 5; // KM
+
   // https://en.wikipedia.org/wiki/Haversine_formula
   // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
   double calculateDistanceKm(lat1, lon1, lat2, lon2) {
@@ -133,8 +135,15 @@ class _HomePageState extends State<HomePage> {
                                   children: <Widget>[
                                     for (final event
                                         in _retrievedEventList!.where(
-                                      (element) => element.categoryIds
-                                          .contains(states.selectedCategory),
+                                      (element) =>
+                                          element.categoryIds.contains(
+                                              states.selectedCategory) &&
+                                          calculateDistanceKm(
+                                                  lat,
+                                                  lng,
+                                                  element.coordinates[0],
+                                                  element.coordinates[1]) <=
+                                              limitDistance,
                                     ))
                                       GestureDetector(
                                         onTap: () {
