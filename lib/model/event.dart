@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event {
-  final num eventId;
-  final String imagePath,
+  late final num eventId;
+  late final String imagePath,
       title,
       description,
       location,
@@ -11,7 +11,7 @@ class Event {
       h2,
       host,
       hostImage;
-  final List coordinates, categoryIds, eventImages;
+  late final List coordinates, categoryIds, eventImages;
 
   Event(
       {required this.imagePath,
@@ -27,6 +27,12 @@ class Event {
       required this.hostImage,
       required this.categoryIds,
       required this.eventImages});
+
+  Event.empty();
+
+  void setEventId(num eventId) {
+    this.eventId = eventId;
+  }
 
   Map<String, dynamic> toMap() {
     return {
