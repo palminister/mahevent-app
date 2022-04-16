@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahevent/ui/event_creation/eventCreation.dart';
+import 'package:mahevent/ui/event_creation/eventForm.dart';
 import 'package:mahevent/ui/homepage/homepage.dart';
 import 'package:mahevent/ui/profile/profile.dart';
 import 'package:mahevent/ui/event_creation/eventCreation.dart';
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   final List<Widget> screens = [
     const HomePage(),
     const Profile(),
-    const EventCreation()
+    const EventForm()
   ];
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currrentScreen = const HomePage();
@@ -65,7 +66,7 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color.fromARGB(255, 232, 6, 104),
         onPressed: () {
           setState(() {
-            currrentScreen = const EventCreation();
+            currrentScreen = const EventForm();
             currentTab = 2;
           });
         },
