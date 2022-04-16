@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mahevent/ui/event_creation/eventCreation.dart';
 import 'package:mahevent/ui/homepage/homepage.dart';
 import 'package:mahevent/ui/profile/profile.dart';
+import 'package:mahevent/ui/event_creation/eventCreation.dart';
 import 'package:mahevent/styles.dart';
 
 class Home extends StatefulWidget {
@@ -12,7 +14,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currentTab = 0;
-  final List<Widget> screens = [const HomePage(), const Profile()];
+  final List<Widget> screens = [
+    const HomePage(),
+    const Profile(),
+    const EventCreation()
+  ];
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currrentScreen = const HomePage();
 
@@ -57,7 +63,12 @@ class _HomeState extends State<Home> {
           size: 35,
         ),
         backgroundColor: const Color.fromARGB(255, 232, 6, 104),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            currrentScreen = const EventCreation();
+            currentTab = 2;
+          });
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
