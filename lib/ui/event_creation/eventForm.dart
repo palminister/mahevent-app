@@ -77,37 +77,12 @@ class _EventFormState extends State<EventForm> {
                 height: 15,
               ),
               const Text(
-                "Coordinates",
-                style: TextStyle(fontSize: 20),
-              ),
-              TextFormField(
-                  // onSaved: (coordinates) {
-                  //   // Will do coordinates later
-                  //   // event.coordinates = coordinates! as List;
-                  // },
-                  ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
                 "Host",
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
                 onSaved: (String? host) {
                   event.host = host!;
-                },
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Text(
-                "Host Image",
-                style: TextStyle(fontSize: 20),
-              ),
-              TextFormField(
-                onSaved: (String? hostImage) {
-                  event.hostImage = hostImage!;
                 },
               ),
               const SizedBox(
