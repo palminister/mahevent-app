@@ -33,7 +33,7 @@ class DatabaseService {
       'h2': event.h2,
       'host': event.host,
       'hostImage': hostImageTemp,
-      'categoryIds': [0, 1, 2, 3],
+      'categoryIds': event.categoryIds,
       'eventImages': [imageTemp]
     });
     return _events.add({
