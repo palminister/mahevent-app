@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahevent/ui/event_creation/eventCreation.dart';
-import 'package:mahevent/ui/event_creation/eventForm.dart';
+import 'package:mahevent/ui/images/images.dart';
 import 'package:mahevent/ui/homepage/homepage.dart';
 import 'package:mahevent/ui/profile/profile.dart';
 import 'package:mahevent/styles.dart';
@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
         onPressed: () {
           setState(() {
             currrentScreen = const EventCreation();
+            // currrentScreen = const Images();
             currentTab = 2;
           });
         },
