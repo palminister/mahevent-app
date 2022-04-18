@@ -16,7 +16,7 @@ class EventForm extends StatefulWidget {
 class _EventFormState extends State<EventForm> {
   final DatabaseService _service = DatabaseService();
 
-  String? _currentSelectedValue = "All";
+  Category? _currentSelectedValue = allCategory;
 
   var a = categories;
 
@@ -92,8 +92,8 @@ class _EventFormState extends State<EventForm> {
                 "Category",
                 style: TextStyle(fontSize: 20),
               ),
-              FormField<String>(
-                builder: (FormFieldState<String> state) {
+              FormField<Category>(
+                builder: (FormFieldState<Category> state) {
                   return InputDecorator(
                       decoration: InputDecoration(
                           errorStyle: const TextStyle(
@@ -101,9 +101,9 @@ class _EventFormState extends State<EventForm> {
                           hintText: "Please select expense",
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
-                      isEmpty: _currentSelectedValue == '',
+                      isEmpty: _currentSelectedValue == null,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
+                        child: DropdownButton<Category>(
                           value: _currentSelectedValue,
                           isDense: true,
                           onChanged: (newValue) {
@@ -113,7 +113,7 @@ class _EventFormState extends State<EventForm> {
                           },
                           items: categories.map((Category _cat) {
                             return DropdownMenuItem(
-                                value: _cat.name, child: Text(_cat.name));
+                                value: _cat, child: Text(_cat.name));
                           }).toList(),
                         ),
                       ));
@@ -154,12 +154,6 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               const Images(),
-              // TextFormField(
-              //     // onSaved: (String? eventImages) {
-              //     //   // Will implement event imageslater
-              //     //   // event.eventImages = eventImages!;
-              //     // },
-              //     ),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -171,7 +165,9 @@ class _EventFormState extends State<EventForm> {
                     formKey.currentState?.save();
                     // print("Event object ");
                     // print(event.h1);
-                    _service.addEvent(event);
+                    event.categoryIds = [_currentSelectedValue!.id];
+                    print("eventID : ${event.categoryIds}");
+                    // _service.addEvent(event);
                     formKey.currentState?.reset();
                     event = Event.empty();
                   },
