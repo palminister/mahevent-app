@@ -1,10 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mahevent/database/firestore_service.dart';
 import 'package:mahevent/model/category.dart';
 import 'package:mahevent/model/event.dart';
 import 'package:mahevent/styles.dart';
 import 'package:mahevent/ui/images/images.dart';
 import 'package:provider/provider.dart';
+
+// Passing data around with callback
+// https://www.digitalocean.com/community/tutorials/flutter-widget-communication
+
+// Listen to global variable with ValueListenableBuilder
+// https://stackoverflow.com/questions/62007967/updating-a-widget-when-a-global-variable-changes-async-in-flutter
+
+final isSetUrl = ValueNotifier<bool>(false);
 
 class EventForm extends StatefulWidget {
   const EventForm({Key? key}) : super(key: key);
@@ -19,6 +30,13 @@ class _EventFormState extends State<EventForm> {
   Category? _currentSelectedValue = allCategory;
 
   var a = categories;
+  late String downloadUrl;
+
+  // void _callback(String url) {
+  //   print(url);
+  //   downloadUrl = url;
+  //   isSetUrl.value = true;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -153,28 +171,123 @@ class _EventFormState extends State<EventForm> {
                 "Event Image",
                 style: TextStyle(fontSize: 20),
               ),
-              const Images(),
+              Images(callbackFunction: (url) {
+                print('url from eventForm widget ${url}');
+                setState(() {
+                  downloadUrl = url;
+                });
+                // downloadUrl = url;
+                isSetUrl.value = true;
+              }),
               SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () async {
-                    formKey.currentState?.save();
-                    // print("Event object ");
-                    // print(event.h1);
-                    event.categoryIds = [_currentSelectedValue!.id];
-                    print("eventID : ${event.categoryIds}");
-                    // _service.addEvent(event);
-                    formKey.currentState?.reset();
-                    event = Event.empty();
-                  },
-                ),
-              )
+                  width: double.infinity,
+                  child: ValueListenableBuilder(
+                    valueListenable: isSetUrl,
+                    builder: (context, value, widget) {
+                      if (value == true) {
+                        return ElevatedButton(
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: () async {
+                            formKey.currentState?.save();
+                            // print("Event object ");
+                            // print(event.h1);
+                            event.categoryIds = [_currentSelectedValue!.id];
+
+                            event.imagePath = downloadUrl;
+                            print("eventID : ${event.categoryIds}");
+                            print("event url : ${event.imagePath}");
+                            await _service.addEvent(event);
+                            formKey.currentState?.reset();
+                            event = Event.empty();
+                          },
+                        );
+                      } else {
+                        return ElevatedButton(
+                            onPressed: () => null,
+                            child: const Text('Hold on...'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black54));
+                      }
+                    },
+                  ))
             ],
           ))),
         ));
   }
 }
+
+// class Images extends StatefulWidget {
+//   const Images({Key? key}) : super(key: key);
+
+//   @override
+//   State<Images> createState() => _ImagesState();
+// }
+
+// class _ImagesState extends State<Images> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const ImageCapture();
+//   }
+// }
+
+// class ImageCapture extends StatefulWidget {
+//   const ImageCapture({Key? key}) : super(key: key);
+
+//   @override
+//   State<ImageCapture> createState() => _ImageCaptureState();
+// }
+
+// class _ImageCaptureState extends State<ImageCapture> {
+//   XFile? _imageFile;
+//   final DatabaseService _service = DatabaseService();
+//   final ImagePicker _picker = ImagePicker();
+
+//   Future<void> _pickImage(ImageSource source) async {
+//     XFile? selected = await _picker.pickImage(source: source);
+
+//     setState(() {
+//       _imageFile = selected;
+//     });
+
+//     url = await _service.uploadImage(selected!);
+//     print('local url after service: ${url}');
+//   }
+
+//   // Future<String> getUrl(Reference ref) async {
+//   //   return await ref.getDownloadURL();
+//   // }
+
+//   void _clear() {
+//     setState(() {
+//       _imageFile = null;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.all(16),
+//       child: Column(
+//         children: <Widget>[
+//           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+//             IconButton(
+//                 onPressed: () => _pickImage(ImageSource.camera),
+//                 icon: const Icon(Icons.photo_camera)),
+//             IconButton(
+//                 onPressed: () => _pickImage(ImageSource.gallery),
+//                 icon: const Icon(Icons.photo_library)),
+//             IconButton(onPressed: _clear, icon: const Icon(Icons.delete))
+//           ]),
+//           if (_imageFile != null)
+//             Card(
+//               child: Image.file(File(_imageFile!.path)),
+//               elevation: 10,
+//             )
+//         ],
+//       ),
+//     );
+//   }
+// }
