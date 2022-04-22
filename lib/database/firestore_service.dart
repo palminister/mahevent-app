@@ -58,6 +58,17 @@ class DatabaseService {
     return _snapshot.ref.getDownloadURL();
   }
 
+  Future<User> getUser() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await _db.collection('users').doc('user-mock').get();
+    final User _user = User.fromDocumentSnapshot(snapshot);
+    // final List<Event> events = snapshot.docs
+    //     .map((docSnapshot) => Event.fromDocumentSnapshot(docSnapshot))
+    //     .toList();
+    return _user;
+    // return snapshot;
+  }
+
   Future<void> editUser(User user) async {
     DocumentReference _user = _db.collection('users').doc('user-mock');
     const imageTemp =
