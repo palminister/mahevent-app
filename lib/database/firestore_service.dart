@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mahevent/model/event.dart';
+import 'package:mahevent/model/user.dart';
 import 'dart:io';
 
 // import 'package:image_picker/image_picker.dart';
@@ -55,5 +56,20 @@ class DatabaseService {
         .child('${DateTime.now()}-${source.name}')
         .putFile(File(source.path));
     return _snapshot.ref.getDownloadURL();
+  }
+
+  Future<void> editUser(User user) async {
+    DocumentReference _user = _db.collection('users').doc('user-mock');
+    const imageTemp =
+        'https://firebasestorage.googleapis.com/v0/b/flutter-mahevent.appspot.com/o/event_images%2Fmusic_concert.jpeg?alt=media&token=98f2aeea-8c19-4bf2-af89-f70b6a9aa60e';
+    const hostImageTemp = 'assets/guest_images/pete1.jpg';
+    return _user.set({
+      'id': user.id,
+      'name': user.name,
+      'username': user.username,
+      'imagePath': user.imagePath,
+      'about': user.about,
+      'interest': user.interest,
+    });
   }
 }
