@@ -12,12 +12,11 @@ class DatabaseService {
   Future<List<Event>> retrieveEvents() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection('events').get();
-    print(snapshot.docs
-        .map((docSnapshot) => Event.fromDocumentSnapshot(docSnapshot))
-        .toList());
-    return snapshot.docs
+
+    final List<Event> events = snapshot.docs
         .map((docSnapshot) => Event.fromDocumentSnapshot(docSnapshot))
         .toList();
+    return events;
     // return snapshot;
   }
 
@@ -32,28 +31,13 @@ class DatabaseService {
       'title': event.title,
       'description': event.description,
       'location': event.location,
-      'coordinates': [14.798942, 100.633961],
+      'coordinates': event.coordinates,
       'duration': event.duration,
       'h1': event.h1,
       'h2': event.h2,
       'host': 'mock_host',
       'hostImage': hostImageTemp,
       'categoryIds': event.categoryIds,
-      'eventImages': [imageTemp]
-    });
-    return _events.add({
-      'imagePath': imageTemp,
-      'eventId': 4,
-      'title': 'Sleep all day long',
-      'description': "Let's just sleep until the day is over",
-      'location': "Hotel",
-      'coordinates': [14.798942, 100.633961],
-      'duration': "10 hours",
-      'h1': "Sleep day",
-      'h2': "Will not wake up until deadline",
-      'host': "Bearhug",
-      'hostImage': hostImageTemp,
-      'categoryIds': [0, 1, 2, 3],
       'eventImages': [imageTemp]
     });
   }
