@@ -15,6 +15,9 @@ import 'package:provider/provider.dart';
 // Listen to global variable with ValueListenableBuilder
 // https://stackoverflow.com/questions/62007967/updating-a-widget-when-a-global-variable-changes-async-in-flutter
 
+// Persist form data to controller during rerendering
+// from Arm Flutter God
+// https://api.flutter.dev/flutter/widgets/TextEditingController-class.html
 final isSetUrl = ValueNotifier<bool>(false);
 
 class EventForm extends StatefulWidget {
@@ -27,16 +30,39 @@ class EventForm extends StatefulWidget {
 class _EventFormState extends State<EventForm> {
   final DatabaseService _service = DatabaseService();
 
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _headerController = TextEditingController();
+  final TextEditingController _subHeaderController = TextEditingController();
   Category? _currentSelectedValue = allCategory;
 
   var a = categories;
-  late String downloadUrl;
+  String? downloadUrl;
 
-  // void _callback(String url) {
-  //   print(url);
-  //   downloadUrl = url;
-  //   isSetUrl.value = true;
-  // }
+  void clearForm() {
+    _titleController.clear();
+    _descriptionController.clear();
+    _durationController.clear();
+    _locationController.clear();
+    _headerController.clear();
+    _subHeaderController.clear();
+    setState(() {
+      downloadUrl = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _durationController.dispose();
+    _locationController.dispose();
+    _headerController.dispose();
+    _subHeaderController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +84,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _titleController,
                 onSaved: (String? title) {
                   event.title = title!;
                 },
@@ -71,6 +98,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _descriptionController,
                 onSaved: (String? description) {
                   event.description = description!;
                 },
@@ -84,6 +112,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _durationController,
                 onSaved: (String? duration) {
                   event.duration = duration!;
                 },
@@ -97,6 +126,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _locationController,
                 onSaved: (String? location) {
                   event.location = location!;
                 },
@@ -146,6 +176,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _headerController,
                 onSaved: (String? header) {
                   event.h1 = header!;
                 },
@@ -159,6 +190,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _subHeaderController,
                 onSaved: (String? subHeader) {
                   event.h2 = subHeader!;
                 },
@@ -172,13 +204,15 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               Images(callbackFunction: (url) {
-                print('url from eventForm widget ${url}');
                 setState(() {
                   downloadUrl = url;
                 });
-                // downloadUrl = url;
                 isSetUrl.value = true;
               }),
+              if (downloadUrl != null)
+                Image(
+                  image: NetworkImage(downloadUrl!),
+                ),
               SizedBox(
                   width: double.infinity,
                   child: ValueListenableBuilder(
@@ -192,16 +226,15 @@ class _EventFormState extends State<EventForm> {
                           ),
                           onPressed: () async {
                             formKey.currentState?.save();
-                            // print("Event object ");
-                            // print(event.h1);
                             event.categoryIds = [_currentSelectedValue!.id];
 
-                            event.imagePath = downloadUrl;
+                            event.imagePath = downloadUrl!;
                             print("eventID : ${event.categoryIds}");
                             print("event url : ${event.imagePath}");
                             await _service.addEvent(event);
                             formKey.currentState?.reset();
                             event = Event.empty();
+                            clearForm();
                           },
                         );
                       } else {
@@ -218,76 +251,3 @@ class _EventFormState extends State<EventForm> {
         ));
   }
 }
-
-// class Images extends StatefulWidget {
-//   const Images({Key? key}) : super(key: key);
-
-//   @override
-//   State<Images> createState() => _ImagesState();
-// }
-
-// class _ImagesState extends State<Images> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const ImageCapture();
-//   }
-// }
-
-// class ImageCapture extends StatefulWidget {
-//   const ImageCapture({Key? key}) : super(key: key);
-
-//   @override
-//   State<ImageCapture> createState() => _ImageCaptureState();
-// }
-
-// class _ImageCaptureState extends State<ImageCapture> {
-//   XFile? _imageFile;
-//   final DatabaseService _service = DatabaseService();
-//   final ImagePicker _picker = ImagePicker();
-
-//   Future<void> _pickImage(ImageSource source) async {
-//     XFile? selected = await _picker.pickImage(source: source);
-
-//     setState(() {
-//       _imageFile = selected;
-//     });
-
-//     url = await _service.uploadImage(selected!);
-//     print('local url after service: ${url}');
-//   }
-
-//   // Future<String> getUrl(Reference ref) async {
-//   //   return await ref.getDownloadURL();
-//   // }
-
-//   void _clear() {
-//     setState(() {
-//       _imageFile = null;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         children: <Widget>[
-//           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-//             IconButton(
-//                 onPressed: () => _pickImage(ImageSource.camera),
-//                 icon: const Icon(Icons.photo_camera)),
-//             IconButton(
-//                 onPressed: () => _pickImage(ImageSource.gallery),
-//                 icon: const Icon(Icons.photo_library)),
-//             IconButton(onPressed: _clear, icon: const Icon(Icons.delete))
-//           ]),
-//           if (_imageFile != null)
-//             Card(
-//               child: Image.file(File(_imageFile!.path)),
-//               elevation: 10,
-//             )
-//         ],
-//       ),
-//     );
-//   }
-// }
