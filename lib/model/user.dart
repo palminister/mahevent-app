@@ -1,9 +1,8 @@
 import 'event.dart';
 
 class User {
-  final int id;
-  final String name, username, imagePath, about, interest;
-  final List ownedEvents;
+  late int id;
+  late String name, username, imagePath, about, interest;
 
   User(
       {required this.id,
@@ -11,19 +10,22 @@ class User {
       required this.username,
       required this.imagePath,
       required this.about,
-      required this.interest,
-      required this.ownedEvents});
+      required this.interest});
+
+  User.empty();
 }
 
 final mainUser = User(
-    id: 0,
-    name: 'Prayut',
-    username: 'realprayut',
-    imagePath:
-        'https://firebasestorage.googleapis.com/v0/b/flutter-mahevent.appspot.com/o/guest_images%2Fguest2.jpg?alt=media&token=5c770c29-2dbf-469e-9831-8720b4a96905',
-    about: 'Prototype and test end-to-end with the Local Emulator Suite, now with Firebase Authentication',
-    interest: 'Comedy Movies Only, any sports but basketball, Sleeping, Politics and Sloths',
-    ownedEvents: [0]);
+  id: 0,
+  name: 'Prayut',
+  username: 'realprayut',
+  imagePath:
+      'https://firebasestorage.googleapis.com/v0/b/flutter-mahevent.appspot.com/o/guest_images%2Fguest2.jpg?alt=media&token=5c770c29-2dbf-469e-9831-8720b4a96905',
+  about:
+      'Prototype and test end-to-end with the Local Emulator Suite, now with Firebase Authentication',
+  interest:
+      'Comedy Movies Only, any sports but basketball, Sleeping, Politics and Sloths',
+);
 
 // final createdEvent = Event(
 //     imagePath: "assets/event_images/5_km_downtown_run.jpeg",
