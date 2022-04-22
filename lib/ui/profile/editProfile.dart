@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahevent/styles.dart';
-import 'package:mahevent/ui/profile/TextFieldWidget.dart';
-import 'package:mahevent/ui/profile/profileWidget.dart';
+import 'package:mahevent/ui/profile/profileImage.dart';
 import 'package:mahevent/database/firestore_service.dart';
 
 import '../../model/user.dart';
@@ -16,20 +15,16 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final DatabaseService _service = DatabaseService();
   User? user;
+  String? downloadUrl;
 
-  @override
-  void initState() {
-    super.initState();
-    // _initRetrieval();
+  void callbackFunction(String url) {
+    setState(() {
+      downloadUrl = url;
+    });
   }
-
-  // Future<void> _initRetrieval() async {
-  //   _user = _service.getUser();
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // User user = mainUser;
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
@@ -43,17 +38,16 @@ class _EditProfileState extends State<EditProfile> {
             builder: (context, AsyncSnapshot<User> snapshot) {
               if (snapshot.hasData) {
                 user = snapshot.data!;
-                print(user!.name);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(
                       height: 20,
                     ),
-                    ProfileWidget(
-                      imagePath: user!.imagePath,
-                      isEdit: true,
-                      onClicked: () async {},
+                    ProfileImage(
+                      imagePath:
+                          downloadUrl == null ? user!.imagePath : downloadUrl!,
+                      callbackFn: callbackFunction,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,12 +117,8 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                               onPressed: () async {
                                 formKey.currentState?.save();
-                                print(user!.name);
-                                print(user!.interest);
-                                print(user!.username);
-                                print(user!.about);
+                                user!.imagePath = downloadUrl!;
                                 await _service.editUser(user!);
-                                // formKey.currentState?.reset();
                               },
                               child: Text('Save',
                                   style: h2TextStyle.copyWith(
