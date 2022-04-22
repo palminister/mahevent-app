@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'event.dart';
 
 class User {
@@ -13,6 +15,14 @@ class User {
       required this.interest});
 
   User.empty();
+
+  User.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
+      : about = doc['about'],
+        id = doc['id'],
+        imagePath = doc['imagePath'],
+        interest = doc['interest'],
+        name = doc['name'],
+        username = doc['username'];
 }
 
 final mainUser = User(
