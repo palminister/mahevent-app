@@ -1,10 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mahevent/database/firestore_service.dart';
 import 'package:mahevent/model/category.dart';
 import 'package:mahevent/model/event.dart';
 import 'package:mahevent/styles.dart';
 import 'package:mahevent/ui/images/images.dart';
 import 'package:provider/provider.dart';
+
+// Passing data around with callback
+// https://www.digitalocean.com/community/tutorials/flutter-widget-communication
+
+// Listen to global variable with ValueListenableBuilder
+// https://stackoverflow.com/questions/62007967/updating-a-widget-when-a-global-variable-changes-async-in-flutter
+
+// Persist form data to controller during rerendering
+// from Arm Flutter God
+// https://api.flutter.dev/flutter/widgets/TextEditingController-class.html
+final isSetUrl = ValueNotifier<bool>(false);
 
 class EventForm extends StatefulWidget {
   const EventForm({Key? key}) : super(key: key);
@@ -16,9 +30,39 @@ class EventForm extends StatefulWidget {
 class _EventFormState extends State<EventForm> {
   final DatabaseService _service = DatabaseService();
 
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _headerController = TextEditingController();
+  final TextEditingController _subHeaderController = TextEditingController();
   Category? _currentSelectedValue = allCategory;
 
   var a = categories;
+  String? downloadUrl;
+
+  void clearForm() {
+    _titleController.clear();
+    _descriptionController.clear();
+    _durationController.clear();
+    _locationController.clear();
+    _headerController.clear();
+    _subHeaderController.clear();
+    setState(() {
+      downloadUrl = null;
+    });
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _durationController.dispose();
+    _locationController.dispose();
+    _headerController.dispose();
+    _subHeaderController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +84,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _titleController,
                 onSaved: (String? title) {
                   event.title = title!;
                 },
@@ -53,6 +98,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _descriptionController,
                 onSaved: (String? description) {
                   event.description = description!;
                 },
@@ -66,6 +112,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _durationController,
                 onSaved: (String? duration) {
                   event.duration = duration!;
                 },
@@ -79,6 +126,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _locationController,
                 onSaved: (String? location) {
                   event.location = location!;
                 },
@@ -128,6 +176,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _headerController,
                 onSaved: (String? header) {
                   event.h1 = header!;
                 },
@@ -141,6 +190,7 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
+                controller: _subHeaderController,
                 onSaved: (String? subHeader) {
                   event.h2 = subHeader!;
                 },
@@ -153,26 +203,49 @@ class _EventFormState extends State<EventForm> {
                 "Event Image",
                 style: TextStyle(fontSize: 20),
               ),
-              const Images(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () async {
-                    formKey.currentState?.save();
-                    // print("Event object ");
-                    // print(event.h1);
-                    event.categoryIds = [_currentSelectedValue!.id];
-                    print("eventID : ${event.categoryIds}");
-                    // _service.addEvent(event);
-                    formKey.currentState?.reset();
-                    event = Event.empty();
-                  },
+              Images(callbackFunction: (url) {
+                setState(() {
+                  downloadUrl = url;
+                });
+                isSetUrl.value = true;
+              }),
+              if (downloadUrl != null)
+                Image(
+                  image: NetworkImage(downloadUrl!),
                 ),
-              )
+              SizedBox(
+                  width: double.infinity,
+                  child: ValueListenableBuilder(
+                    valueListenable: isSetUrl,
+                    builder: (context, value, widget) {
+                      if (value == true) {
+                        return ElevatedButton(
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: () async {
+                            formKey.currentState?.save();
+                            event.categoryIds = [_currentSelectedValue!.id];
+
+                            event.imagePath = downloadUrl!;
+                            print("eventID : ${event.categoryIds}");
+                            print("event url : ${event.imagePath}");
+                            await _service.addEvent(event);
+                            formKey.currentState?.reset();
+                            event = Event.empty();
+                            clearForm();
+                          },
+                        );
+                      } else {
+                        return ElevatedButton(
+                            onPressed: () => null,
+                            child: const Text('Hold on...'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black54));
+                      }
+                    },
+                  ))
             ],
           ))),
         ));
