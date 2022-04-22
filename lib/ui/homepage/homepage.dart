@@ -1,4 +1,7 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mahevent/database/firestore_service.dart';
 import 'package:mahevent/model/category.dart';
 import 'package:mahevent/model/event.dart';
@@ -22,19 +25,30 @@ class _HomePageState extends State<HomePage> {
   final DatabaseService _service = DatabaseService();
   Future<List<Event>>? _eventList;
   List<Event>? _retrievedEventList;
+  Position? _position;
+
   @override
   void initState() {
     super.initState();
     _initRetrieval();
   }
 
+  // Future<void> _initCoordination() async {
+  //   _position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   print('call init coordinates');
+  //   print(_position);
+  // }
+
+  // var b = await Geolocator.getCurrentPosition(
+  //     desiredAccuracy: LocationAccuracy.high);
+
   Future<void> _initRetrieval() async {
     _eventList = _service.retrieveEvents();
-    _retrievedEventList = await _service.retrieveEvents();
   }
 
-  final double lat = 13.794498305148874;
-  final double lng = 100.32558404809016;
+  // final double lat = 13.794498305148874;
+  // final double lng = 100.32558404809016;
 
   // static const double limitDistance = 5; // KM
   static const double limitDistance =
@@ -55,32 +69,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      // appBar: AppBar(
-      //   toolbarHeight: 80,
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      //   flexibleSpace: ClipPath(
-      //     clipper: AppbarShape(),
-      //     child: Container(
-      //       decoration: const BoxDecoration(
-      //         gradient: LinearGradient(
-      //           begin: Alignment.topCenter,
-      //           end: Alignment.bottomLeft,
-      //           colors: [
-      //             Color.fromARGB(255, 255, 28, 100),
-      //             Color.fromARGB(255, 26, 134, 249),
-      //           ],
-      //         ),
-      //       ),
-      //       width: screenWidth,
-      //       child: const Center(
-      //           child: Text(
-      //         'MAH EVENT',
-      //         style: appTextStyle,
-      //       )),
-      //     ),
-      //   ),
-      // ),
       body: ChangeNotifierProvider<States>(
         create: (_) => States(),
         child: Stack(
@@ -119,53 +107,80 @@ class _HomePageState extends State<HomePage> {
                           )),
                       Consumer<States>(
                           builder: (context, states, _) => FutureBuilder(
-                              future: _eventList,
-                              builder: (context,
-                                  AsyncSnapshot<List<Event>> snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Center(
-                                    child: Text('No data'),
+                              future: Geolocator.getCurrentPosition(
+                                  desiredAccuracy: LocationAccuracy.high),
+                              builder:
+                                  (context, AsyncSnapshot<Position> snapshot) {
+                                if (snapshot.hasData) {
+                                  // Another Future
+                                  var _position = snapshot.data;
+                                  return FutureBuilder(
+                                    future: _eventList,
+                                    builder: (context,
+                                        AsyncSnapshot<List<Event>> snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const Text('no data...');
+                                      } else if (snapshot.hasError) {
+                                        return const Text('has error...');
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.active) {
+                                        return const Text('is querying...');
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Text('is waiting...');
+                                      } else if (snapshot.hasData) {
+                                        return Column(
+                                          children: <Widget>[
+                                            for (final event
+                                                in snapshot.data!.where(
+                                              (element) =>
+                                                  element.categoryIds.contains(
+                                                      states
+                                                          .selectedCategory) &&
+                                                  calculateDistanceKm(
+                                                          _position!.latitude,
+                                                          _position.longitude,
+                                                          element
+                                                              .coordinates[0],
+                                                          element.coordinates[
+                                                              1]) <=
+                                                      limitDistance,
+                                            ))
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EventDetails(
+                                                                  event:
+                                                                      event)));
+                                                },
+                                                child: EventWidget(
+                                                  event: event,
+                                                  distance: calculateDistanceKm(
+                                                      _position!.latitude,
+                                                      _position.longitude,
+                                                      event.coordinates[0],
+                                                      event.coordinates[1]),
+                                                ),
+                                              )
+                                          ],
+                                        );
+                                      } else {
+                                        return const Text('something wrong...');
+                                      }
+                                    },
                                   );
-                                }
-
-                                if (snapshot.connectionState ==
+                                } else if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
                                   return const CircularProgressIndicator();
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.active) {
+                                  return const Text('is doing...');
+                                } else {
+                                  return const Text(
+                                      'is waiting to do... (somethings off)');
                                 }
-
-                                return Column(
-                                  children: <Widget>[
-                                    for (final event
-                                        in _retrievedEventList!.where(
-                                      (element) =>
-                                          element.categoryIds.contains(
-                                              states.selectedCategory) &&
-                                          calculateDistanceKm(
-                                                  lat,
-                                                  lng,
-                                                  element.coordinates[0],
-                                                  element.coordinates[1]) <=
-                                              limitDistance,
-                                    ))
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EventDetails(
-                                                          event: event)));
-                                        },
-                                        child: EventWidget(
-                                          event: event,
-                                          distance: calculateDistanceKm(
-                                              lat,
-                                              lng,
-                                              event.coordinates[0],
-                                              event.coordinates[1]),
-                                        ),
-                                      )
-                                  ],
-                                );
                               }))
                     ],
                   ),
