@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:mahevent/model/event.dart';
 import 'package:mahevent/styles.dart';
 import 'package:mahevent/ui/images/images.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 
 // Passing data around with callback
 // https://www.digitalocean.com/community/tutorials/flutter-widget-communication
@@ -51,6 +53,15 @@ class _EventFormState extends State<EventForm> {
     setState(() {
       downloadUrl = null;
     });
+  }
+
+  Future<List<double>> getCurrentLocation() async {
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print('Position:');
+    print('latitude: ${position.latitude}');
+    print('longtitude: ${position.longitude}');
+    return [position.latitude, position.longitude];
   }
 
   @override
@@ -226,11 +237,15 @@ class _EventFormState extends State<EventForm> {
                           ),
                           onPressed: () async {
                             formKey.currentState?.save();
-                            event.categoryIds = [_currentSelectedValue!.id];
 
+                            var coordinates = await getCurrentLocation();
+                            event.coordinates = coordinates;
+                            event.categoryIds = [_currentSelectedValue!.id];
                             event.imagePath = downloadUrl!;
+
                             print("eventID : ${event.categoryIds}");
                             print("event url : ${event.imagePath}");
+
                             await _service.addEvent(event);
                             formKey.currentState?.reset();
                             event = Event.empty();
