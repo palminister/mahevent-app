@@ -33,7 +33,7 @@ class DatabaseService {
       'description': event.description,
       'location': event.location,
       'coordinates': event.coordinates,
-      'duration': event.duration,
+      'date': event.date,
       'h1': event.h1,
       'h2': event.h2,
       'host': 'mock_host',
