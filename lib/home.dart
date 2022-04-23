@@ -47,7 +47,11 @@ class _HomeState extends State<Home> {
             width: screenWidth,
             child: Center(
                 child: Text(
-              currentTab == 0 ? 'Mah Event Explorer' : 'Profile',
+              currentTab == 0
+                  ? 'Mah Event Explorer'
+                  : currentTab == 1
+                      ? 'Profile'
+                      : 'Create Event',
               style: appTextStyle,
             )),
           ),
