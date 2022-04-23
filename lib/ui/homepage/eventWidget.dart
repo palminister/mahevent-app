@@ -48,32 +48,47 @@ class EventWidget extends StatelessWidget {
                             style: eventTitleTextStyle,
                           ),
                           const SizedBox(height: 10),
-                          Row(
+                          Column(
                             children: <Widget>[
-                              Text(
-                                event.duration.toUpperCase() + ' ',
-                                style: appTextStyle.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w200),
+                              Row(
+                                children: <Widget>[
+                                  const Icon(
+                                    Icons.date_range,
+                                    color: Color.fromARGB(255, 232, 6, 104),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    event.duration.toUpperCase() + ' ',
+                                    style: appTextStyle.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w200),
+                                  ),
+                                ],
                               ),
-                              const Icon(
-                                Icons.location_on,
-                                color: Color.fromARGB(255, 232, 6, 104),
+                              Row(
+                                children: <Widget>[
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: Color.fromARGB(255, 232, 6, 104),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(event.location,
+                                      style: appTextStyle.copyWith(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w200)),
+                                  Text(
+                                      ' (' +
+                                          distance.toStringAsPrecision(2) +
+                                          ' KM)',
+                                      style: appTextStyle.copyWith(
+                                          color: Colors.indigo,
+                                          fontWeight: FontWeight.w200))
+                                ],
                               ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(event.location,
-                                  style: appTextStyle.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w200)),
-                              Text(
-                                  ' (' +
-                                      distance.toStringAsPrecision(2) +
-                                      ' KM)',
-                                  style: appTextStyle.copyWith(
-                                      color: Colors.indigo,
-                                      fontWeight: FontWeight.w200))
                             ],
                           )
                         ]),
