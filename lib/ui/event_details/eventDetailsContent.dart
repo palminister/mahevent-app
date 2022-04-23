@@ -18,7 +18,7 @@ class EventDetailsContent extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(
                 screenWidth * 0.2, 40.0, screenWidth * 0.2, 0.0),
             child: SizedBox(
-              height: 275,
+              height: 250,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,26 +30,49 @@ class EventDetailsContent extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          event.datetime.toUpperCase() + ' ',
-                          style: appTextStyle.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.w200),
-                        ),
-                        const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.date_range,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              event.datetime.toUpperCase() + ' ',
+                              style: appTextStyle.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w200),
+                            ),
+                          ],
                         ),
                         const SizedBox(
-                          width: 5,
+                          height: 5,
                         ),
-                        Text(event.location,
-                            style: appTextStyle.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w200))
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(event.location,
+                                style: appTextStyle.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w200))
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -64,7 +87,7 @@ class EventDetailsContent extends StatelessWidget {
             ),
             child: ClipOval(
                 child: Image(
-              image: NetworkImage(event.imagePath),
+              image: NetworkImage(event.hostImage),
               width: 130,
               height: 130,
               fit: BoxFit.cover,
@@ -104,16 +127,6 @@ class EventDetailsContent extends StatelessWidget {
               textAlign: TextAlign.left,
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(25, 0, 25, 16),
-              child: Center(
-                child: Text(
-                  event.datetime.toString(),
-                  style: appTextStyle.copyWith(
-                      color: Colors.black, fontWeight: FontWeight.w200),
-                  textAlign: TextAlign.left,
-                ),
-              ))
         ],
       ),
     );
