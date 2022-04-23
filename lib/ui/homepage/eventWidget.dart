@@ -51,7 +51,7 @@ class EventWidget extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Text(
-                                event.date.toUpperCase() + ' ',
+                                event.datetime.toUpperCase() + ' ',
                                 style: appTextStyle.copyWith(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w200),

@@ -35,7 +35,7 @@ class EventDetailsContent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          event.date.toUpperCase() + ' ',
+                          event.datetime.toUpperCase() + ' ',
                           style: appTextStyle.copyWith(
                               color: Colors.white, fontWeight: FontWeight.w200),
                         ),
@@ -108,7 +108,7 @@ class EventDetailsContent extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(25, 0, 25, 16),
               child: Center(
                 child: Text(
-                  event.date.toString(),
+                  event.datetime.toString(),
                   style: appTextStyle.copyWith(
                       color: Colors.black, fontWeight: FontWeight.w200),
                   textAlign: TextAlign.left,

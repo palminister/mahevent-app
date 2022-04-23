@@ -34,7 +34,7 @@ class _EventFormState extends State<EventForm> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _datetimeController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _subHeaderController = TextEditingController();
@@ -46,7 +46,7 @@ class _EventFormState extends State<EventForm> {
   void clearForm() {
     _titleController.clear();
     _descriptionController.clear();
-    _dateController.clear();
+    _datetimeController.clear();
     _locationController.clear();
     _headerController.clear();
     _subHeaderController.clear();
@@ -68,7 +68,7 @@ class _EventFormState extends State<EventForm> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
-    _dateController.dispose();
+    _datetimeController.dispose();
     _locationController.dispose();
     _headerController.dispose();
     _subHeaderController.dispose();
@@ -123,9 +123,9 @@ class _EventFormState extends State<EventForm> {
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
-                controller: _dateController,
-                onSaved: (String? date) {
-                  event.date = date!;
+                controller: _datetimeController,
+                onSaved: (String? datetime) {
+                  event.datetime = datetime!;
                 },
               ),
               const SizedBox(
@@ -240,7 +240,7 @@ class _EventFormState extends State<EventForm> {
 
                             var coordinates = await getCurrentLocation();
                             event.coordinates = coordinates;
-                            event.categoryIds = [_currentSelectedValue!.id];
+                            event.categoryIds = [0, _currentSelectedValue!.id];
                             event.imagePath = downloadUrl!;
 
                             await _service.addEvent(event);
