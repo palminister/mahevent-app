@@ -14,70 +14,69 @@ class EventDetailsContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                screenWidth * 0.2, 40.0, screenWidth * 0.2, 0.0),
-            child: SizedBox(
-              height: 250,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    event.title,
-                    style: eventWhiteTitleTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.date_range,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              event.datetime.toUpperCase() + ' ',
+          SizedBox(
+            height: 280,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 70,
+                ),
+                Text(
+                  event.title,
+                  style: eventWhiteTitleTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.date_range,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            event.datetime.toUpperCase() + ' ',
+                            style: appTextStyle.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w200),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(event.location,
                               style: appTextStyle.copyWith(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w200),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(event.location,
-                                style: appTextStyle.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w200))
-                          ],
-                        ),
-                      ],
-                    ),
+                                  fontWeight: FontWeight.w200))
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Padding(

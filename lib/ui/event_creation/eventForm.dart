@@ -252,7 +252,8 @@ class _EventFormState extends State<EventForm> {
                       } else {
                         return ElevatedButton(
                             onPressed: () => null,
-                            child: const Text('Hold on...'),
+                            child:
+                                const Text('Please fill in all the details...'),
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.black54));
                       }

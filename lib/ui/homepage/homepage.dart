@@ -50,9 +50,9 @@ class _HomePageState extends State<HomePage> {
   // final double lat = 13.794498305148874;
   // final double lng = 100.32558404809016;
 
-  // static const double limitDistance = 5; // KM
-  static const double limitDistance =
-      5000; // KM // I am Shinkanzen, I will go wherever I please
+  static const double limitDistance = 5; // KM
+  // static const double limitDistance =
+  //     5000; // KM // I am Shinkanzen, I will go wherever I please
 
   // https://en.wikipedia.org/wiki/Haversine_formula
   // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                                     builder: (context,
                                         AsyncSnapshot<List<Event>> snapshot) {
                                       if (!snapshot.hasData) {
-                                        return const Text('no data...');
+                                        return const Text('Loading...');
                                       } else if (snapshot.hasError) {
                                         return const Text('has error...');
                                       } else if (snapshot.connectionState ==
