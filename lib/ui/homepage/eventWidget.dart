@@ -60,7 +60,7 @@ class EventWidget extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    event.duration.toUpperCase() + ' ',
+                                    event.datetime.toUpperCase() + ' ',
                                     style: appTextStyle.copyWith(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w200),

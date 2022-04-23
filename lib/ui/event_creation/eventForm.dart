@@ -34,7 +34,7 @@ class _EventFormState extends State<EventForm> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _datetimeController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _subHeaderController = TextEditingController();
@@ -46,7 +46,7 @@ class _EventFormState extends State<EventForm> {
   void clearForm() {
     _titleController.clear();
     _descriptionController.clear();
-    _durationController.clear();
+    _datetimeController.clear();
     _locationController.clear();
     _headerController.clear();
     _subHeaderController.clear();
@@ -68,7 +68,7 @@ class _EventFormState extends State<EventForm> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
-    _durationController.dispose();
+    _datetimeController.dispose();
     _locationController.dispose();
     _headerController.dispose();
     _subHeaderController.dispose();
@@ -117,15 +117,15 @@ class _EventFormState extends State<EventForm> {
               const SizedBox(
                 height: 15,
               ),
-              // Duration
+              // Date
               const Text(
-                "Duration",
+                "Date",
                 style: TextStyle(fontSize: 20),
               ),
               TextFormField(
-                controller: _durationController,
-                onSaved: (String? duration) {
-                  event.duration = duration!;
+                controller: _datetimeController,
+                onSaved: (String? datetime) {
+                  event.datetime = datetime!;
                 },
               ),
               const SizedBox(
@@ -240,11 +240,8 @@ class _EventFormState extends State<EventForm> {
 
                             var coordinates = await getCurrentLocation();
                             event.coordinates = coordinates;
-                            event.categoryIds = [_currentSelectedValue!.id];
+                            event.categoryIds = [0, _currentSelectedValue!.id];
                             event.imagePath = downloadUrl!;
-
-                            print("eventID : ${event.categoryIds}");
-                            print("event url : ${event.imagePath}");
 
                             await _service.addEvent(event);
                             formKey.currentState?.reset();
@@ -260,7 +257,8 @@ class _EventFormState extends State<EventForm> {
                                 primary: Colors.black54));
                       }
                     },
-                  ))
+                  )),
+              const SizedBox(height: 70)
             ],
           ))),
         ));

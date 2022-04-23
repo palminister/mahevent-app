@@ -42,7 +42,7 @@ final mainUser = User(
 //     title: "5 Kilometer Downtown Run",
 //     description: "",
 //     location: "Pleasant Park",
-//     duration: "3h",
+//     date: "3h",
 //     h1: "Marathon!",
 //     h2: "The latest fad in foodology, get the inside scoup.",
 //     host: "Pattricia Luang",
